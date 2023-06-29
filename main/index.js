@@ -1,25 +1,12 @@
 const inquirer = require('inquirer');
 const jest = require('jest');
 const fs = require('fs');
-const {Circle, Triangle, Square} = require("./lib/shapes")
+//const {Circle, Triangle, Square} = require("./lib/shapes")
+const Circle = require("./lib/circle")
+const Triangle = require("./lib/triangle")
+const Square = require("./lib/square")
 const shapes = require("./lib/shapes")
 
-class ABV{
-  constructor(){
-    this.text = ""
-    this.shape = ""
-  }
-  render(){
-    return `<svg width="350" height="60" xmlns="http://www.w3.org/2000/svg"/>`
-  }
-  setText(text,color){
-    this.text = `<text x="10" y="10" font-size="30" text-anchor="middle"</text>`
-  }
-  setShape(shape){
-    this.shape = shape.render()
-  }
-  
-}
 
 const questions =[
   {
@@ -42,7 +29,7 @@ const questions =[
   },
   {
     type: 'input',
-    name: 'shape color',
+    name: 'shape_color',
     message: 'What color would you like your shape?',
   },
 ];
@@ -61,10 +48,22 @@ function writeToFile(fileName, data) {
 function init() {
   inquirer.prompt(questions)
     .then(function (data) {
-      writeToFile('logo.svg', shapes.js(data));
+      console.log(data)
+      if(data.shape == "Triangle"){
+        let shape = new Triangle(questions.shape_color, questions.text, questions.shape)
+        fs.writeFileSync('logo.svg', shape.render());
+      }
+      else if(questions.shape == "Square"){
+        let shape = new Square(questions.shape_color, questions.text, questions.shape)
+        fs.writeFileSync('logo.svg', shape.render());
+    }
+      else {
+        let shape = new Circle(questions.shape_color, questions.text, questions.shape)
+        fs.writeFileSync('logo.svg',`${Circle.render()}`)
+      };
     })
 }
-
+   
 
 
 
